@@ -27,13 +27,13 @@ if(logFromChild) {
   var command = program.args[0];
   var args = program.args.slice(1);
   var env = process.env;
-  
+
   env.FORCE_COLOR = true;
-  
+
   var child = spawn(command, args, {
     env: env,
     stdio: [null, null, null, null],
-    detached: true
+    detached: process.platform !== 'win32'
   });
 }
 
@@ -67,7 +67,7 @@ if(logFromChild) {
       value: data.toString("utf8")
     }]);
   });
-  
+
   child.stderr.on("data", function (data) {
     dashboard.setData([{
       type: "log",
@@ -85,4 +85,3 @@ if(logFromChild) {
     });
   });
 }
-
